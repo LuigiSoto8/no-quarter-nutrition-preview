@@ -1361,3 +1361,47 @@ input::placeholder,textarea::placeholder { color: #969e97; opacity: 1; }
 .nqn-recipe-quantity{margin:2px 0 8px;font-size:12px}
 .nqn-recipe-quantity summary{cursor:pointer;color:#d2c7b4;text-decoration:underline;text-underline-offset:3px;min-height:28px}
 .nqn-recipe-quantity span{display:block;margin-top:5px;line-height:1.5;color:#babbb3}
+
+/* Compact daily summary; five equal metrics across desktop, stacked on phone. */
+.nqn-daily-nutrition{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:16px 0}
+.nqn-daily-metric{padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--panel)}
+.nqn-daily-metric span,.nqn-daily-metric small{display:block;font-size:11px;color:var(--muted)}
+.nqn-daily-metric strong{display:block;font-size:18px;color:var(--gold2);overflow-wrap:anywhere}
+#view-groceries summary{font-size:12px;cursor:pointer;color:var(--muted)}
+#view-groceries .grocery-controls button{min-height:44px}
+@media(max-width:560px){.nqn-daily-nutrition{grid-template-columns:repeat(2,minmax(0,1fr))}.nqn-daily-metric:first-child{grid-column:1/-1}.nqn-cal-day{min-width:0}.nqn-cal-day .nqn-cal-total{display:none}}
+/* Keep all seven day choices visible without a horizontal scroll. */
+#view-planner .nqn-calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;overflow:visible;padding:0;margin:18px 0}
+#view-planner .nqn-cal-day{width:auto;min-width:0;min-height:66px;padding:10px 4px;text-align:center}
+#view-planner .nqn-cal-day strong{font:600 14px Georgia,serif}
+#view-planner .nqn-cal-day small{font-size:10px}
+#view-planner .nqn-cal-total{display:none}
+#view-planner .nqn-cal-editor{padding:16px;margin-top:14px}
+#view-planner .section-header h2{font-size:clamp(27px,4vw,40px)}
+#view-planner .section-header p{max-width:640px;font-size:13px}
+.nqn-daily-metric progress{width:100%;height:6px;accent-color:var(--gold)}
+#view-account input,#view-account select{max-width:100%}
+@media(max-width:560px){#view-planner .section-header{margin-top:16px}#view-planner .section-header h2{font-size:29px}#view-planner .nqn-cal-day small{display:none}#view-planner .nqn-cal-day{min-height:44px}#view-planner .nqn-daily-nutrition{grid-template-columns:repeat(3,minmax(0,1fr))}#view-planner .nqn-daily-metric:first-child{grid-column:auto}.nqn-daily-metric strong{font-size:16px}.nqn-daily-metric{padding:9px}}
+
+/* Elegant per-serving nutrition display, including dietary fiber. */
+.nqn-recipe-macro-panel{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:16px 0 8px}
+.nqn-recipe-macro{min-width:0;padding:12px 8px;text-align:center;border:1px solid rgba(210,177,110,.25);border-radius:5px;background:rgba(18,24,22,.86)}
+.nqn-recipe-macro span{display:block;color:#d3c7ac;font-size:10px;font-weight:650;text-transform:uppercase;letter-spacing:.08em}
+.nqn-recipe-macro strong{display:block;font-family:Georgia,serif;font-size:clamp(14px,2.6vw,21px);font-weight:400;color:#efd8a5;line-height:1.3;margin-top:6px;overflow-wrap:anywhere}
+.nqn-macro-pending .nqn-recipe-macro strong{font:400 13px/1.4 Georgia,serif;color:#bfc2b9}
+.nqn-nutrition-disclaimer{font-size:11px;line-height:1.6;color:#adb3ad;margin:0 0 17px}
+@media(max-width:560px){.nqn-recipe-macro-panel{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.nqn-recipe-macro{padding:11px 5px}.nqn-recipe-macro strong{font-size:16px}.nqn-recipe-macro:last-child{grid-column:auto}}
+
+/* Touch-first shopping adjustments: native accessible dialog, no browser prompt. */
+.nqn-package-note{display:block;font-size:10px;line-height:1.4;color:#b9b9b0;margin-top:4px}
+.nqn-shop-edit-dialog{max-width:480px;width:calc(100% - 32px);background:#151b19;color:#f4ead7;border:1px solid rgba(216,184,120,.42);border-radius:9px;padding:26px}
+.nqn-shop-edit-dialog::backdrop{background:rgba(0,0,0,.75)}
+.nqn-shop-edit-dialog h3{font:400 29px/1.2 Georgia,serif;color:#f1ddb4;margin:13px 0}
+.nqn-shop-edit-dialog label{display:block;font-size:13px;margin:18px 0;color:#ddd1ba}
+.nqn-shop-edit-dialog input{display:block;width:100%;min-height:48px;margin-top:8px;background:#0d1211;color:#f7f2e9;border:1px solid #99805c;border-radius:5px;padding:10px}
+.nqn-shop-edit-dialog .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.nqn-shop-edit-dialog .actions button{min-height:44px}
+#view-groceries .grocery-row{border-radius:6px}
+#view-groceries .grocery-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+#view-groceries .grocery-controls button{min-height:44px}
+@media(max-width:560px){.nqn-shop-edit-dialog{padding:23px 18px}.nqn-shop-edit-dialog h3{font-size:25px}#view-groceries .grocery-controls .purchase-check{flex-basis:100%}}
