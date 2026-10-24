@@ -155,11 +155,21 @@
       '<p class="fine">Combined quantities for this preview, minus measured pantry quantities in compatible units. Unknown pantry amounts cannot be deducted.</p>' +
       '<div class="nqn-generated-items">'+items.map(item=>{
         const priced=pricedByKey.get(item.key);
+        const isRatio=item.name==='Ratio yogurt' && item.dimension==='mass';
+        const ratioTubs=isRatio?Math.ceil(item.needBase/(24*28.349523125)):0;
+        const purchaseLabel=isRatio?
+          (ratioTubs>0?'Buy '+ratioTubs+' × 24 oz Ratio yogurt tub'+(ratioTubs===1?'':'s')+' (suggested size)':'Already in your pantry'):
+          'Shopping amount needed';
         return '<div class="nqn-generated-item"><strong>'+safe(item.name)+'</strong>' +
+          '<span class="nqn-purchase-recommendation">'+safe(
+             isRatio?purchaseLabel:priced&&priced.packages!=null?
+             'Buy '+priced.packages+' package(s) at your selected store':
+             'Choose a package at your store (see recipe quantities)')+'</span>' +
+          '<details class="nqn-recipe-quantity"><summary>Recipe quantities</summary>'+
           '<span>Need '+safe(item.amount.toFixed(2))+' '+safe(item.unit) +
           ' · At home '+safe(item.have.toFixed(2))+' '+safe(item.unit) +
           ' · To buy '+safe(item.missing.toFixed(2))+' '+safe(item.unit) +
-          (item.unknown?' · Quantity to confirm':'')+'</span>' +
+          (item.unknown?' · Quantity to confirm':'')+'</span></details>' +
           (priced&&priced.packages!=null?
           '<small>'+priced.packages+' package(s) · '+money(priced.cost)+
           (priced.product?' · '+safe(priced.product):'')+'</small>':'')+

@@ -17,8 +17,12 @@
     if (!unitChoices || typeof unitChoices !== 'object' || Array.isArray(unitChoices)) unitChoices={};
   } catch (_) { unitChoices={}; }
 
+  function displayIngredient(name) {
+    const text=String(name||'').trim();
+    return /^:?\s*ratio\s+(?:protein\s+)?plain\b/i.test(text)?'Ratio yogurt':text;
+  }
   function exactKey(name) {
-    return String(name || '').normalize('NFKC').replace(/\s+/g,' ').trim().toLowerCase();
+    return displayIngredient(name).normalize('NFKC').replace(/\s+/g,' ').trim().toLowerCase();
   }
   function textSafe(value) { return htmlEscape(String(value)); }
   function sourceIngredients(recipe) {
@@ -41,8 +45,9 @@
     const ready = new Map(recipes.filter(r => r && r.id).map(r => [r.id,r]));
     function addRows(rows,source,approval) {
       rows.forEach(item=>{
-        const name=String(item.name||'').trim();
-        if (!name) return;
+        const rawName=String(item.name||'').trim();
+        if (!rawName) return;
+        const name=displayIngredient(rawName);
         const key=exactKey(name);
         if (!byName.has(key)) byName.set(key,{
           key:key, name:name,units:new Set(),recipeNames:new Set(),statuses:new Set(),categories:new Set()
@@ -66,8 +71,17 @@
   }
   function stockAmount(entry,unit) {
     const id=entry.key+'|'+unit;
-    const n=Number(pantry[id]);
-    return Number.isFinite(n)&&n>0?n:0;
+    const records=Object.entries(pantry).filter(([key])=>{
+      const separator=key.lastIndexOf('|');
+      return separator>=0 && key.slice(separator+1)===unit &&
+        exactKey(key.slice(0,separator))===entry.key;
+    });
+    // Old saved Ratio descriptions can refer to the same tub. Prefer the
+    // canonical record, otherwise use the largest legacy entry without double counting.
+    const canonical=Number(pantry[id]);
+    if(Number.isFinite(canonical)&&canonical>0)return canonical;
+    const amounts=records.map(([,value])=>Number(value)).filter(n=>Number.isFinite(n)&&n>0);
+    return amounts.length?Math.max(...amounts):0;
   }
   function selectedUnit(entry) {
     const known=[...entry.units];

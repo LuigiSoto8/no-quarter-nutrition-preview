@@ -8,6 +8,11 @@
     each:['each',1],slice:['slice',1],slices:['slice',1],scoop:['scoop',1],package:['package',1]
   };
   const normalize=v=>String(v||'').normalize('NFKC').toLowerCase().replace(/\s+/g,' ').trim();
+  const displayIngredient=v=>{
+    const text=String(v||'').trim();
+    return /^:?\s*ratio\s+(?:protein\s+)?plain\b/i.test(text)?'Ratio yogurt':text;
+  };
+  const ingredientKey=v=>normalize(displayIngredient(v));
   function unitInfo(unit) {
     return factors[normalize(unit)]||[normalize(unit)||'unknown',1];
   }
@@ -22,8 +27,8 @@
         const multiple=choice.servings/recipe.serves;
         recipe.ingredients.forEach((item)=>{
           if (!Array.isArray(item)||!item[0])return;
-          const name=String(item[0]).trim(),unit=String(item[2]||'each');
-          const nameKey=normalize(name),info=unitInfo(unit),key=nameKey+'|'+info[0];
+          const name=displayIngredient(item[0]),unit=String(item[2]||'each');
+          const nameKey=ingredientKey(item[0]),info=unitInfo(unit),key=nameKey+'|'+info[0];
           if(!map.has(key))map.set(key,{key,name,nameKey,dimension:info[0],unit:unit,
             amount:0,unknown:false,sources:new Set(),category:String(item[3]||'Other')});
           const entry=map.get(key),quantity=Number(item[1]);
@@ -37,13 +42,20 @@
     return all.map(item=>{
       // Existing pantry records use exact ingredient name + unit; known units in the same dimension are convertible.
       let available=0;
+      const matches=[];
       for(const [storageKey,value] of Object.entries(stock)){
         const separator=storageKey.lastIndexOf('|');
-        if(separator<0||normalize(storageKey.slice(0,separator))!==item.nameKey)continue;
+        if(separator<0||ingredientKey(storageKey.slice(0,separator))!==item.nameKey)continue;
         const info=unitInfo(storageKey.slice(separator+1));
         if(info[0]===item.dimension && Number.isFinite(Number(value))&&Number(value)>0)
-          available+=Number(value)*info[1];
+          matches.push({key:storageKey,amount:Number(value)*info[1]});
       }
+      // Legacy alternate names for the SAME Ratio Plain tub must not be
+      // counted as separate stock unless actual separate packages are recorded.
+      if(item.nameKey==='ratio yogurt'){
+        const canonical=matches.find(x=>x.key==='ratio yogurt|'+item.unit);
+        available=canonical?canonical.amount:Math.max(0,...matches.map(x=>x.amount));
+      }else available=matches.reduce((sum,x)=>sum+x.amount,0);
       const missing=Math.max(0,item.amount-available);
       const converted=unitInfo(item.unit)[1];
       return {key:item.key,name:item.name,unit:item.unit,dimension:item.dimension,
