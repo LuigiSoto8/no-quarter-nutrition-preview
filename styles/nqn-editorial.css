@@ -1297,3 +1297,57 @@ input::placeholder,textarea::placeholder { color: #969e97; opacity: 1; }
   .nqn-budget-prices{grid-template-columns:1fr}
   .nqn-budget-form{padding:17px}
 }
+
+/* Pantry coverage + automatic grocery planning. Keeps one scrollable region per view. */
+.nqn-ingredient-library-panel{margin:16px 0 25px;border:1px solid rgba(217,184,114,.27);padding:clamp(17px,3vw,28px)}
+.nqn-ingredient-library-panel h3{font:400 clamp(26px,4vw,36px)/1.15 Georgia,serif;margin:14px 0}
+.nqn-library-controls{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin:20px 0}
+.nqn-library-controls label{font-size:12px;color:#e0d8c8}
+.nqn-library-controls input,.nqn-library-controls select{display:block;width:100%;margin-top:7px;min-height:44px;padding:10px;border:1px solid #7a684a;background:#101514;color:#f3efe5;border-radius:4px}
+.nqn-library-results{border-top:1px solid rgba(219,187,128,.2)}
+.nqn-library-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 0;border-bottom:1px solid rgba(219,187,128,.14)}
+.nqn-library-item{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.nqn-library-item strong{font-size:14px;font-weight:500;overflow-wrap:anywhere}
+.nqn-library-item span{font-size:11px;color:#bfbfb7;line-height:1.4}
+.nqn-library-stock{display:flex;align-items:center;gap:10px}
+.nqn-library-stock label{font-size:10px;letter-spacing:.02em;color:#bdbdb3}
+.nqn-library-stock select,.nqn-library-stock input{display:block;margin-top:5px;width:105px;padding:9px;min-height:42px;border-radius:4px;border:1px solid #776546;background:#101514;color:#f3efe5}
+.nqn-library-stock input{width:90px}
+.nqn-library-page-bar{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;margin:18px 0}
+.nqn-library-page-bar span{font-size:12px;color:#c7c5bd}
+.nqn-shopping-setup{width:min(500px,calc(100% - 24px));border:1px solid rgba(211,177,110,.42);background:#131816;color:#f5efe4}
+.nqn-shopping-setup .dialog-inner{padding:30px}
+.nqn-shopping-setup h2{font:400 clamp(30px,6vw,40px)/1.1 Georgia,serif;margin:15px 0}
+.nqn-shopping-setup form{display:grid;gap:15px;margin-top:20px}
+.nqn-shopping-setup label{font-size:12px;color:#dfccaa}
+.nqn-shopping-setup input,.nqn-shopping-setup select{display:block;width:100%;min-height:44px;background:#101514;color:#f3efe5;border:1px solid #806a49;margin-top:7px;padding:10px}
+.nqn-shopping-setup .actions{display:flex;flex-wrap:wrap}
+.nqn-budget-form .form-grid{margin:0 0 18px}
+.nqn-budget-form>label{display:block;margin:18px 0;font-size:13px;color:var(--gold2)}
+.nqn-budget-form>label select{display:block;margin-top:7px;width:100%;min-height:44px}
+.nqn-budget-form .btn{margin-top:18px}
+.nqn-price-connection{padding:20px;margin:16px 0;border-color:rgba(216,185,126,.22)}
+.nqn-price-connection p{margin-top:10px;line-height:1.65}
+.nqn-budget-result:empty{display:none}
+.nqn-budget-summary h3,.nqn-generated-groceries h3{font:400 clamp(23px,4vw,31px)/1.2 Georgia,serif;margin:0 0 14px;color:#f5e6c4}
+.nqn-generated-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin:18px 0}
+.nqn-generated-day{border:1px solid rgba(216,185,126,.25);padding:13px 10px;border-radius:4px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.nqn-generated-day strong{font-size:12px;color:var(--gold2)}
+.nqn-generated-day span{font-size:10px;line-height:1.48;color:#cbc9c1;overflow-wrap:anywhere}
+.nqn-budget-total{border-top:1px solid rgba(216,185,126,.3);border-bottom:1px solid rgba(216,185,126,.3);padding:18px 0;margin:22px 0}
+.nqn-budget-total strong{font:400 20px Georgia,serif}
+.nqn-generated-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:16px 0 25px}
+.nqn-generated-item{display:flex;flex-direction:column;gap:6px;min-width:0;padding:12px;border:1px solid rgba(216,185,126,.21);border-radius:4px}
+.nqn-generated-item strong{font-size:13px;font-weight:500;color:#f2e7d2}
+.nqn-generated-item span,.nqn-generated-item small{font-size:11px;line-height:1.55;color:#c2c3bc}
+@media(max-width:1100px){.nqn-generated-week{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:720px){
+ .nqn-library-controls{grid-template-columns:1fr}
+ .nqn-library-row{flex-direction:column;align-items:stretch;gap:11px}
+ .nqn-library-stock{width:100%;justify-content:flex-start}
+ .nqn-library-stock select{width:135px}
+ .nqn-library-stock input{width:110px}
+ .nqn-generated-week{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .nqn-generated-items{grid-template-columns:1fr}
+ .nqn-shopping-setup .dialog-inner{padding:24px 18px}
+}
