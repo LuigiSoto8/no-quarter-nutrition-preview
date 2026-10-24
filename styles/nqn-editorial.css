@@ -1351,3 +1351,7 @@ input::placeholder,textarea::placeholder { color: #969e97; opacity: 1; }
  .nqn-generated-items{grid-template-columns:1fr}
  .nqn-shopping-setup .dialog-inner{padding:24px 18px}
 }
+
+/* October 24: all cookbook recipes can be viewed from weekly calendar. */
+.nqn-calendar-view-recipe{display:inline-flex;align-items:center;margin-left:8px;min-height:34px;padding:5px 9px;border:1px solid rgba(213,182,117,.42);border-radius:4px;background:rgba(213,182,117,.09);color:var(--gold2);font-size:11px;cursor:pointer}
+.nqn-calendar-view-recipe:hover{border-color:var(--gold2)}

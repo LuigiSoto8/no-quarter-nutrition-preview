@@ -44,16 +44,16 @@
     const entry = mealEntry(selectedDay,slot);
     const recipe = recipeById(entry.recipeId);
     const macro = hasRecipeNutrition(recipe) ? recipeMacros(recipe) : null;
-    const options = recipes.filter(r => hasRecipeNutrition(r) || r.id === entry.recipeId).map(r =>
+    const options = recipes.filter(r => isRecipeSelectable(r) || r.id === entry.recipeId).map(r =>
       '<option value="' + textSafe(r.id) + '"' +
         (entry.recipeId === r.id ? ' selected' : '') + '>' +
-        textSafe(r.title) + (hasRecipeNutrition(r) ? '' : ' · Nutrition incomplete') + '</option>'
+        textSafe(r.title) + (r.cookbookWorking ? ' · Working recipe' : hasRecipeNutrition(r) ? '' : ' · Nutrition incomplete') + '</option>'
     ).join('');
     const id = 'servings-' + (slot === 'Breakfast' ? '' : slot + '-') + selectedDay;
     const description = macro ?
        calculatedMacro(macro[0] * entry.servings) + ' kcal · ' +
        calculatedMacro(macro[1] * entry.servings) + ' g protein, prepared servings' :
-       recipe ? 'Nutrition incomplete; cannot be used in automatic planning' : 'Select a meal to see its nutrition';
+       recipe && recipe.cookbookWorking ? 'Ingredients included in shopping list · macro and fiber panel in review' : recipe ? 'Nutrition incomplete' : 'Select a meal to see its nutrition';
     return '<div class="nqn-cal-edit-row">' +
       '<div class="nqn-meal-name">' + textSafe(slot) + '</div>' +
       '<select data-day="' + selectedDay + '" data-slot="' + textSafe(slot) +
@@ -63,7 +63,7 @@
       '<input id="' + id + '" type="number" inputmode="numeric" min="1" max="12" step="1" ' +
       'data-servings="' + selectedDay + '" data-slot="' + textSafe(slot) + '" value="' +
       entry.servings + '"' + (recipe ? '' : ' disabled') + '></div>' +
-      '<div class="nqn-meal-macros">' + textSafe(description) + '</div>' +
+      '<div class="nqn-meal-macros">' + textSafe(description) + (recipe && recipe.cookbookWorking ? ' <button type="button" class="nqn-calendar-view-recipe" data-nqn-view-recipe="' + textSafe(recipe.id) + '">View recipe</button>' : '') + '</div>' +
       '</div>';
   }
 
@@ -87,6 +87,8 @@
   };
 
   document.addEventListener('click',event => {
+    const viewRecipe = event.target.closest('[data-nqn-view-recipe]');
+    if (viewRecipe) {showRecipe(viewRecipe.dataset.nqnViewRecipe);return;}
     const dayButton = event.target.closest('[data-calendar-day]');
     if (!dayButton) return;
     const day=Number(dayButton.dataset.calendarDay);

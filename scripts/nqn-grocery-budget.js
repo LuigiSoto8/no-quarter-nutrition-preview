@@ -91,7 +91,7 @@
   }
 
   function eligibleGroups() {
-    return logic.groupBySlot(recipes,NQN_COOKBOOK_CATALOG,hasRecipeNutrition);
+    return logic.groupBySlot(recipes,NQN_COOKBOOK_CATALOG,isRecipeSelectable);
   }
   function missingCategories(groups) {
     return ['Breakfast','Lunch','Dinner','Snack'].filter(slot=>!groups[slot].length);
@@ -170,6 +170,7 @@
     const all=logic.aggregate(week,recipeBy,pantry);
     proposal={week:week,items:all,quoted:calc,store:selectedStore(),zip:zipField.value.trim(),budget:budget};
     const missing=missingCategories(groups);
+    const underReview=week.flatMap(d=>Object.values(d)).filter(item=>item.recipeId&&recipeBy(item.recipeId)?.cookbookWorking).length;
     const meals=week.flatMap(d=>Object.values(d)).filter(x=>x.recipeId).length;
     const costLine=calc?.complete ?
       '<strong>Priced cart estimate: '+money(calc.total)+'</strong>' +
@@ -178,7 +179,8 @@
         'This quoted ingredient cart exceeds the entered budget. Do not treat it as a budget-matched plan.')+'</p>':
       '<strong>Total price not available</strong><p class="fine">Local store prices have not been fully verified. The plan is not certified to fit your spending limit.</p>';
     result.innerHTML='<div class="nqn-budget-summary"><h3>Automatically generated meal calendar</h3>' +
-      '<p class="fine">'+meals+' eligible meals placed across seven days. '+safe(statusMessage)+'</p>'+
+      '<p class="fine">'+meals+' recipe selections placed across seven days. '+safe(statusMessage)+'</p>'+ 
+      (underReview?'<p class="fine">'+underReview+' selections use working recipes. Their ingredients are included in grocery needs; complete macro and fiber totals are withheld pending culinary validation.</p>':'')+
       (missing.length?'<p class="fine">Still awaiting eligible recipes for: '+safe(missing.join(', '))+
        '. These meal slots are not included in budget calculations.</p>':'')+
       '<div class="nqn-generated-week">'+week.map((day,i)=>
