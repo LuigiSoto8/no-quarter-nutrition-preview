@@ -79,7 +79,7 @@
     // Old saved Ratio descriptions can refer to the same tub. Prefer the
     // canonical record, otherwise use the largest legacy entry without double counting.
     const canonical=Number(pantry[id]);
-    if(Number.isFinite(canonical)&&canonical>0)return canonical;
+    if(Object.prototype.hasOwnProperty.call(pantry,id)&&Number.isFinite(canonical)&&canonical>=0)return canonical;
     const amounts=records.map(([,value])=>Number(value)).filter(n=>Number.isFinite(n)&&n>0);
     return amounts.length?Math.max(...amounts):0;
   }
@@ -150,7 +150,7 @@
     }
     input.setCustomValidity('');
     const unit=selectedUnit(entry),id=entry.key+'|'+unit;
-    if(n>0)pantry[id]=n;else delete pantry[id];
+    pantry[id]=n; // Keep an explicit zero so legacy aliases cannot resurrect removed stock.
     safeSet(pantryKey,JSON.stringify(pantry));
     const status=document.getElementById('nqn-library-saved');
     if(status)status.textContent='Pantry amount saved for '+entry.name+' ('+unit+').';

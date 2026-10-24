@@ -55,6 +55,7 @@
   }
   async function discoverStores(){
     providerStoreOptions=[];
+    result.textContent='';
     storeField.innerHTML='<option value="">Select a nearby store</option>';
     storeField.disabled=true;
     if(!isZip(zipField.value)){
@@ -155,15 +156,15 @@
       '<p class="fine">Combined quantities for this preview, minus measured pantry quantities in compatible units. Unknown pantry amounts cannot be deducted.</p>' +
       '<div class="nqn-generated-items">'+items.map(item=>{
         const priced=pricedByKey.get(item.key);
-        const isRatio=item.name==='Ratio yogurt' && item.dimension==='mass';
+        const isRatio=item.name==='Ratio yogurt' && item.dimension==='mass' && !item.unknown && priced?.packages==null;
         const ratioTubs=isRatio?Math.ceil(item.needBase/(24*28.349523125)):0;
         const purchaseLabel=isRatio?
           (ratioTubs>0?'Buy '+ratioTubs+' × 24 oz Ratio yogurt tub'+(ratioTubs===1?'':'s')+' (suggested size)':'Already in your pantry'):
           'Shopping amount needed';
         return '<div class="nqn-generated-item"><strong>'+safe(item.name)+'</strong>' +
           '<span class="nqn-purchase-recommendation">'+safe(
-             isRatio?purchaseLabel:priced&&priced.packages!=null?
-             'Buy '+priced.packages+' package(s) at your selected store':
+             item.missing<=1e-7&&!item.unknown?'Already in your pantry':isRatio?purchaseLabel:priced&&priced.packages!=null?
+             'Buy '+priced.packages+' × '+priced.packageQuantity+' '+priced.packageUnit+' packages at your selected store':
              'Choose a package at your store (see recipe quantities)')+'</span>' +
           '<details class="nqn-recipe-quantity"><summary>Recipe quantities</summary>'+
           '<span>Need '+safe(item.amount.toFixed(2))+' '+safe(item.unit) +
@@ -202,7 +203,7 @@
       '<div class="nqn-budget-total">'+costLine+'</div>'+
       displayGroceryList(all,calc)+
       '<p class="fine">Current cookbook recipes still require final full nutrition and fiber verification before a client launch. A preview plan does not override any coach-assigned targets.</p>'+
-      '<button type="button" class="btn" id="nqn-budget-apply">Add meals and ingredients to my calendar and shopping list →</button></div>';
+      '<button type="button" class="btn" id="nqn-budget-apply">Add meals and ingredients to my calendar and shopping list →</button><p class="fine">After applying, open Shopping List to edit quantities, mark purchases, remove items or undo removals.</p><button type="button" class="btn secondary" data-nav-to="groceries">Open Shopping List</button></div>';
   }
   async function buildPlan(event){
     if(event)event.preventDefault();
@@ -242,7 +243,7 @@
     // Only overwrite slots included in the proposal; do not erase other client choices.
     const replaced=proposal.week.some((day,i)=>['Breakfast','Lunch','Dinner','Snack'].some(slot=>{
       const candidate=day[slot],prior=mealEntry(i,slot);
-      return candidate.recipeId && prior.recipeId && prior.recipeId!==candidate.recipeId;
+      return candidate.recipeId && prior.recipeId && (prior.recipeId!==candidate.recipeId || prior.servings!==candidate.servings);
     }));
     if(replaced&&!confirm('Replace the selected meal slots with these generated meals? Unavailable meal slots and the remaining entries will stay unchanged.'))return;
     proposal.week.forEach((day,i)=>{
@@ -291,8 +292,9 @@
   retailerField.addEventListener('change',()=>{
     saveProfile();proposal=null;discoverStores();
   });
-  budgetField.addEventListener('change',saveProfile);
-  householdField.addEventListener('change',saveProfile);
+  storeField.addEventListener('change',()=>{proposal=null;result.textContent='';});
+  budgetField.addEventListener('change',()=>{saveProfile();proposal=null;result.textContent='';});
+  householdField.addEventListener('change',()=>{saveProfile();proposal=null;result.textContent='';});
   groceryForm.addEventListener('submit',buildPlan);
   result.addEventListener('click',event=>{
     if(event.target.closest('#nqn-budget-apply'))applyProposal();
