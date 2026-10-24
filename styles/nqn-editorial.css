@@ -1230,3 +1230,70 @@ input::placeholder,textarea::placeholder { color: #969e97; opacity: 1; }
   .nqn-coach-dialog .dialog-inner {padding:24px 21px 28px;}
   .nqn-coach-dialog .dialog-title h2 {font-size:32px;}
 }
+
+/* NQN October 2026 preview refinement: crest-led welcome, compact calendar, store-budget inputs. */
+#view-home .nqn-welcome-hero,
+#view-home .hero.nqn-welcome-hero {
+  display:block!important;position:relative;isolation:isolate;min-height:510px;
+  padding:0!important;margin:0 auto!important;overflow:hidden;
+  border:1px solid rgba(216,185,126,.30)!important;border-radius:8px!important;
+  background:radial-gradient(ellipse at 50% 42%,rgba(78,66,39,.18),transparent 68%),#111716!important;
+}
+#view-home .nqn-welcome-hero .nqn-home-watermark{
+  display:block!important;position:absolute;z-index:0;pointer-events:none;
+  width:min(82%,650px);height:auto;max-width:650px;aspect-ratio:1;object-fit:contain;
+  left:50%;top:49%;transform:translate(-50%,-50%);
+  opacity:.095;filter:none;
+}
+#view-home .nqn-welcome-hero .nqn-hero-copy{
+  display:flex;position:relative;z-index:1;align-items:flex-start;
+  justify-content:center;max-width:930px;min-height:510px;
+  padding:clamp(34px,5.5vw,70px)!important;background:transparent!important;
+}
+#view-home .nqn-welcome-hero h1{max-width:750px;margin-top:27px;font-size:clamp(40px,5.3vw,68px);}
+#view-home .nqn-welcome-hero .lead{max-width:700px;margin-top:22px;font-size:clamp(14px,1.5vw,17px);}
+.nqn-home-quicklinks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:100%;margin-top:30px}
+.nqn-home-quicklinks button{display:flex;flex-direction:column;gap:8px;text-align:left;
+  padding:16px;min-height:97px;border:1px solid rgba(214,185,126,.38);
+  border-radius:5px;background:rgba(11,16,15,.83);color:var(--ink);}
+.nqn-home-quicklinks strong{font-size:12px;color:var(--gold2)}
+.nqn-home-quicklinks span{font-size:11px;color:var(--nqn-muted,#c8c9c2)}
+.nqn-home-quicklinks button:hover{border-color:var(--gold2)}
+.nqn-calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:9px;margin:18px 0 20px}
+.nqn-cal-day{display:flex;flex-direction:column;min-height:126px;padding:13px 10px;text-align:left;
+  background:#161c1a;color:var(--ink);border:1px solid rgba(208,180,123,.24);border-radius:5px;}
+.nqn-cal-day[aria-pressed="true"]{background:#27271f;border-color:var(--gold2);box-shadow:0 0 0 1px rgba(216,185,126,.3)}
+.nqn-cal-day strong{font:400 19px/1.15 Georgia,serif;color:var(--gold2)}
+.nqn-cal-day small{font-size:10px;color:#d4d0c6;margin-top:11px}
+.nqn-cal-day .nqn-cal-total{display:block;font-size:10px;margin-top:auto;padding-top:9px;color:#bcbdb7}
+.nqn-cal-editor{border:1px solid rgba(216,185,126,.3);background:rgba(20,25,24,.86);padding:20px;border-radius:5px}
+.nqn-cal-editor h3{font:400 28px/1.2 Georgia,serif;color:var(--gold2);margin:0 0 17px}
+.nqn-cal-edit-row{display:grid;grid-template-columns:110px minmax(0,1fr) 88px;gap:11px;align-items:center;border-top:1px solid rgba(216,185,126,.15);padding:14px 0}
+.nqn-cal-edit-row .nqn-meal-name{font-size:13px;color:var(--gold2)}
+.nqn-cal-edit-row select,.nqn-cal-edit-row input{max-width:100%;width:100%;background:#111716;color:var(--ink);min-height:43px;border:1px solid #78674c;border-radius:4px;padding:8px}
+.nqn-cal-edit-row .nqn-meal-serving label{font-size:10px;display:block;color:#bcbdb7}
+.nqn-cal-edit-row .nqn-meal-macros{grid-column:2 / 4;font-size:11px;color:#bcbdb7}
+.nqn-budget-form{padding:24px;margin-top:20px}
+.nqn-budget-prices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:22px 0}
+.nqn-budget-price{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px;border:1px solid rgba(216,185,126,.24);border-radius:5px}
+.nqn-budget-price span{font-size:12px;max-width:270px}
+.nqn-budget-price input{width:120px;max-width:38%;min-height:43px;background:#101514;color:var(--ink);padding:8px;border:1px solid #7c6a4b;border-radius:5px}
+.nqn-budget-result:not(:empty){border:1px solid rgba(216,185,126,.32);padding:20px;margin:19px 0}
+.nqn-budget-result h3{font:400 25px Georgia,serif;margin-bottom:14px}
+.nqn-budget-result .fine{margin:12px 0}
+@media(max-width:720px){
+  #view-home .nqn-welcome-hero,#view-home .hero.nqn-welcome-hero{display:block!important;min-height:0;margin-inline:0!important;}
+  #view-home .nqn-welcome-hero .nqn-hero-copy{display:flex;min-height:0;padding:35px 24px 30px!important;}
+  #view-home .nqn-welcome-hero h1{font-size:clamp(36px,9.2vw,47px)}
+  #view-home .nqn-welcome-hero .nqn-home-watermark{width:95%;top:34%;opacity:.09}
+  .nqn-home-quicklinks{grid-template-columns:1fr;gap:9px}
+  .nqn-home-quicklinks button{min-height:68px}
+  .nqn-calendar-grid{grid-template-columns:repeat(7,minmax(113px,1fr));overflow-x:auto;gap:8px;padding-bottom:10px}
+  #days-list{overflow:hidden}
+  .nqn-cal-day{min-height:109px}
+  .nqn-cal-edit-row{grid-template-columns:1fr 90px;gap:8px}
+  .nqn-cal-edit-row .nqn-meal-name{grid-column:1 / -1}
+  .nqn-cal-edit-row .nqn-meal-macros{grid-column:1 / -1}
+  .nqn-budget-prices{grid-template-columns:1fr}
+  .nqn-budget-form{padding:17px}
+}
